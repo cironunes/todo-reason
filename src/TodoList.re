@@ -2,14 +2,6 @@ open Todo;
 
 module Styles = {
   open Css;
-  let fade =
-    keyframes([
-      (0, [opacity(0.), transform(translateX(px(-6)))]),
-      (
-        100,
-        [opacity(1.), visibility(visible), transform(translateX(zero))],
-      ),
-    ]);
 
   let list =
     style([
@@ -17,7 +9,12 @@ module Styles = {
       margin(zero),
       listStyleType(`none),
       lineHeight(`abs(2.0)),
+      selector(
+        "li.removed",
+        [animationName(Theme.fadeOut), animationDuration(Theme.defaultAnimationDuration)],
+      ),
     ]);
+
   let listItem =
     style([
       position(relative),
@@ -27,13 +24,13 @@ module Styles = {
       Theme.defaultBorder(borderBottom),
       borderWidth(px(1)),
       padding(Theme.spacing200),
+
+      // animation
+      animationName(Theme.fadeIn),
+      animationDuration(Theme.defaultAnimationDuration),
+
       selector(":last-child", [borderBottomWidth(zero)]),
       hover([backgroundColor(Theme.neutral200)]),
-      animationName(fade),
-      animationTimingFunction(easeInOut),
-      animationDuration(300),
-      animationDelay(0),
-      animationFillMode(both),
     ]);
 
   let label =
@@ -56,24 +53,54 @@ module Styles = {
     style([
       margin4(~top=zero, ~left=zero, ~right=Theme.spacing200, ~bottom=zero),
     ]);
+
+  let remove = style([position(relative)]);
 };
 
 [@react.component]
-let make = (~todos: todos, ~onTodoRemoved: todo => unit) => {
+let make =
+    (
+      ~todos: todos,
+      ~onTodoRemoved: todo => unit,
+      ~onCompletedTodo: todo => unit,
+    ) => {
+  let (removedIndex, setRemovedIndex) = React.useState(() => None);
   <ol className=Styles.list>
     {todos
      ->Array.of_list
      ->Belt.Array.mapWithIndex((index, todo) =>
-         <li key={index->string_of_int} className=Styles.listItem>
+         <li
+           key={index->string_of_int}
+           className={Cn.make([
+             Styles.listItem,
+             Cn.mapSome(
+               removedIndex,
+               fun
+               | i =>
+                 if (todo.id == i) {
+                   "removed";
+                 } else {
+                   "";
+                 },
+             ),
+           ])}>
            <label className=Styles.label>
              <input
                className=Styles.checkbox
                type_="checkbox"
-               defaultChecked={todo.completed}
+               checked={todo.completed}
+               onClick={_ => onCompletedTodo(todo)}
              />
              <span> todo.text->ReasonReact.string </span>
            </label>
-           <button onClick={_ => {onTodoRemoved(todo)}}>
+           <button
+             className=Styles.remove
+             onClick={_ => {
+               setRemovedIndex(_ => Some(todo.id));
+               Js.Global.setTimeout(() => {onTodoRemoved(todo)}, 200)
+               |> ignore;
+               ();
+             }}>
              "x"->ReasonReact.string
            </button>
          </li>

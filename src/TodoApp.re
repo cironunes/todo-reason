@@ -26,6 +26,7 @@ module Styles = {
     ]);
 
   let container = style([display(`flex), marginBottom(Theme.spacing300)]);
+
   let input =
     style([
       minWidth(px(190)),
@@ -35,8 +36,10 @@ module Styles = {
       Theme.defaultBorder(border),
       focus([outlineWidth(zero)]),
     ]);
+
   let button =
     style([
+      marginLeft(px(-1)),
       backgroundColor(Theme.primaryBackgroundColor),
       color(Theme.primaryTextColor),
       padding(Theme.spacing200),
@@ -45,6 +48,13 @@ module Styles = {
       lineHeight(Theme.defaultButtonLineHeight),
       border(px(1), solid, Theme.primaryBackgroundColor),
       focus([outlineWidth(zero)]),
+      cursor(`pointer),
+      disabled([
+        background(Theme.neutral200),
+        borderColor(Theme.neutral100),
+        color(Theme.neutral300),
+        cursor(`notAllowed),
+      ]),
     ]);
 };
 
@@ -53,6 +63,7 @@ let text = ReasonReact.string;
 type action =
   | ChangeTodoText(string)
   | Remove(todo)
+  | Complete(todo)
   | Add(todo);
 
 type state = {
@@ -71,6 +82,18 @@ let make = () => {
             todos: state.todos->List.append([todo]),
           }
         | ChangeTodoText(newText) => {...state, newTodo: newText}
+        | Complete(todo) => {
+            ...state,
+            todos:
+              state.todos
+              |> List.map(item =>
+                   if (item.id == todo.id) {
+                     {...item, completed: !item.completed};
+                   } else {
+                     item;
+                   }
+                 ),
+          }
         | Remove(todo) => {
             ...state,
             todos: state.todos |> List.find_all(item => item.id != todo.id),
@@ -107,11 +130,15 @@ let make = () => {
           ChangeTodoText(ReactEvent.Form.target(e)##value)->dispatch
         }}
       />
-      <button className=Styles.button> "Add"->text </button>
+      <button disabled={state.newTodo == ""} className=Styles.button>
+        "Add"->text
+      </button>
     </form>
+
     <TodoList
       todos={state.todos}
       onTodoRemoved={todo => Remove(todo)->dispatch}
+      onCompletedTodo={todo => Complete(todo)->dispatch}
     />
   </div>;
 };

@@ -70,25 +70,46 @@ var input = Css.style(/* :: */[
     ]);
 
 var button = Css.style(/* :: */[
-      Css.backgroundColor(Theme$ReasonReactExamples.primaryBackgroundColor),
+      Css.marginLeft(Css.px(-1)),
       /* :: */[
-        Css.color(Theme$ReasonReactExamples.primaryTextColor),
+        Css.backgroundColor(Theme$ReasonReactExamples.primaryBackgroundColor),
         /* :: */[
-          Css.padding(Theme$ReasonReactExamples.spacing200),
+          Css.color(Theme$ReasonReactExamples.primaryTextColor),
           /* :: */[
-            Css.fontWeight(Css.bold),
+            Css.padding(Theme$ReasonReactExamples.spacing200),
             /* :: */[
-              Css.fontSize(Theme$ReasonReactExamples.defaultFontSize),
+              Css.fontWeight(Css.bold),
               /* :: */[
-                Css.lineHeight(Theme$ReasonReactExamples.defaultButtonLineHeight),
+                Css.fontSize(Theme$ReasonReactExamples.defaultFontSize),
                 /* :: */[
-                  Css.border(Css.px(1), Css.solid, Theme$ReasonReactExamples.primaryBackgroundColor),
+                  Css.lineHeight(Theme$ReasonReactExamples.defaultButtonLineHeight),
                   /* :: */[
-                    Css.focus(/* :: */[
-                          Css.outlineWidth(Css.zero),
+                    Css.border(Css.px(1), Css.solid, Theme$ReasonReactExamples.primaryBackgroundColor),
+                    /* :: */[
+                      Css.focus(/* :: */[
+                            Css.outlineWidth(Css.zero),
+                            /* [] */0
+                          ]),
+                      /* :: */[
+                        Css.cursor(/* pointer */-786317123),
+                        /* :: */[
+                          Css.disabled(/* :: */[
+                                Css.background(Theme$ReasonReactExamples.neutral200),
+                                /* :: */[
+                                  Css.borderColor(Theme$ReasonReactExamples.neutral100),
+                                  /* :: */[
+                                    Css.color(Theme$ReasonReactExamples.neutral300),
+                                    /* :: */[
+                                      Css.cursor(/* notAllowed */939907157),
+                                      /* [] */0
+                                    ]
+                                  ]
+                                ]
+                              ]),
                           /* [] */0
-                        ]),
-                    /* [] */0
+                        ]
+                      ]
+                    ]
                   ]
                 ]
               ]
@@ -126,7 +147,23 @@ function TodoApp(Props) {
                                 }))(state.todos),
                         newTodo: state.newTodo
                       };
-            case /* Add */2 :
+            case /* Complete */2 :
+                var todo$1 = action[0];
+                return {
+                        todos: List.map((function (item) {
+                                if (item.id === todo$1.id) {
+                                  return {
+                                          id: item.id,
+                                          text: item.text,
+                                          completed: !item.completed
+                                        };
+                                } else {
+                                  return item;
+                                }
+                              }), state.todos),
+                        newTodo: state.newTodo
+                      };
+            case /* Add */3 :
                 return {
                         todos: List.append(state.todos, /* :: */[
                               action[0],
@@ -164,7 +201,7 @@ function TodoApp(Props) {
                   className: container,
                   onSubmit: (function (e) {
                       e.preventDefault();
-                      return Curry._1(dispatch, /* Add */Block.__(2, [{
+                      return Curry._1(dispatch, /* Add */Block.__(3, [{
                                       id: new Date().toISOString(),
                                       text: state.newTodo,
                                       completed: false
@@ -179,11 +216,15 @@ function TodoApp(Props) {
                           return Curry._1(dispatch, /* ChangeTodoText */Block.__(0, [e.target.value]));
                         })
                     }), React.createElement("button", {
-                      className: button
+                      className: button,
+                      disabled: state.newTodo === ""
                     }, "Add")), React.createElement(TodoList$ReasonReactExamples.make, {
                   todos: state.todos,
                   onTodoRemoved: (function (todo) {
                       return Curry._1(dispatch, /* Remove */Block.__(1, [todo]));
+                    }),
+                  onCompletedTodo: (function (todo) {
+                      return Curry._1(dispatch, /* Complete */Block.__(2, [todo]));
                     })
                 }));
 }
