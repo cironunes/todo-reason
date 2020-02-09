@@ -30,6 +30,14 @@ var card = Css.style(/* :: */[
       ]
     ]);
 
+var title = Css.style(/* :: */[
+      Css.margin4(Css.zero, Css.zero, Theme$ReasonReactExamples.spacing300, Css.zero),
+      /* :: */[
+        Css.padding(Css.zero),
+        /* [] */0
+      ]
+    ]);
+
 var container = Css.style(/* :: */[
       Css.display(/* flex */-1010954439),
       /* :: */[
@@ -48,7 +56,13 @@ var input = Css.style(/* :: */[
             Css.lineHeight(Theme$ReasonReactExamples.defaultInputLineHeight),
             /* :: */[
               Theme$ReasonReactExamples.defaultBorder(Css.border),
-              /* [] */0
+              /* :: */[
+                Css.focus(/* :: */[
+                      Css.outlineWidth(Css.zero),
+                      /* [] */0
+                    ]),
+                /* [] */0
+              ]
             ]
           ]
         ]
@@ -69,7 +83,13 @@ var button = Css.style(/* :: */[
                 Css.lineHeight(Theme$ReasonReactExamples.defaultButtonLineHeight),
                 /* :: */[
                   Css.border(Css.px(1), Css.solid, Theme$ReasonReactExamples.primaryBackgroundColor),
-                  /* [] */0
+                  /* :: */[
+                    Css.focus(/* :: */[
+                          Css.outlineWidth(Css.zero),
+                          /* [] */0
+                        ]),
+                    /* [] */0
+                  ]
                 ]
               ]
             ]
@@ -80,6 +100,7 @@ var button = Css.style(/* :: */[
 
 var Styles = {
   card: card,
+  title: title,
   container: container,
   input: input,
   button: button
@@ -137,7 +158,9 @@ function TodoApp(Props) {
   var state = match[0];
   return React.createElement("div", {
               className: card
-            }, React.createElement("h1", undefined, "To-do"), React.createElement("form", {
+            }, React.createElement("h1", {
+                  className: title
+                }, "To-do"), React.createElement("form", {
                   className: container,
                   onSubmit: (function (e) {
                       e.preventDefault();

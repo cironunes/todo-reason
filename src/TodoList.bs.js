@@ -7,6 +7,35 @@ var React = require("react");
 var Belt_Array = require("bs-platform/lib/js/belt_Array.js");
 var Theme$ReasonReactExamples = require("./Theme.bs.js");
 
+var fade = Css.keyframes(/* :: */[
+      /* tuple */[
+        0,
+        /* :: */[
+          Css.opacity(0),
+          /* :: */[
+            Css.transform(Css.translateX(Css.px(-6))),
+            /* [] */0
+          ]
+        ]
+      ],
+      /* :: */[
+        /* tuple */[
+          100,
+          /* :: */[
+            Css.opacity(1),
+            /* :: */[
+              Css.visibility(Css.visible),
+              /* :: */[
+                Css.transform(Css.translateX(Css.zero)),
+                /* [] */0
+              ]
+            ]
+          ]
+        ],
+        /* [] */0
+      ]
+    ]);
+
 var list = Css.style(/* :: */[
       Css.padding(Css.zero),
       /* :: */[
@@ -45,10 +74,25 @@ var listItem = Css.style(/* :: */[
                         ]),
                     /* :: */[
                       Css.hover(/* :: */[
-                            Css.backgroundColor(Theme$ReasonReactExamples.neutral100),
+                            Css.backgroundColor(Theme$ReasonReactExamples.neutral200),
                             /* [] */0
                           ]),
-                      /* [] */0
+                      /* :: */[
+                        Css.animationName(fade),
+                        /* :: */[
+                          Css.animationTimingFunction(Css.easeInOut),
+                          /* :: */[
+                            Css.animationDuration(300),
+                            /* :: */[
+                              Css.animationDelay(0),
+                              /* :: */[
+                                Css.animationFillMode(Css.both),
+                                /* [] */0
+                              ]
+                            ]
+                          ]
+                        ]
+                      ]
                     ]
                   ]
                 ]
@@ -61,18 +105,21 @@ var listItem = Css.style(/* :: */[
 
 var label = Css.style(/* :: */[
       Css.selector(":before", /* :: */[
-            Css.position(Css.absolute),
+            Css.cursor(/* pointer */-786317123),
             /* :: */[
-              Css.width(Css.pct(100)),
+              Css.position(Css.absolute),
               /* :: */[
-                Css.height(Css.pct(100)),
+                Css.width(Css.pct(100)),
                 /* :: */[
-                  Css.contentRule(""),
+                  Css.height(Css.pct(100)),
                   /* :: */[
-                    Css.left(Css.zero),
+                    Css.contentRule(""),
                     /* :: */[
-                      Css.top(Css.zero),
-                      /* [] */0
+                      Css.left(Css.zero),
+                      /* :: */[
+                        Css.top(Css.zero),
+                        /* [] */0
+                      ]
                     ]
                   ]
                 ]
@@ -82,18 +129,16 @@ var label = Css.style(/* :: */[
       /* [] */0
     ]);
 
-var labelText = Css.style(/* [] */0);
-
 var checkbox = Css.style(/* :: */[
       Css.margin4(Css.zero, Theme$ReasonReactExamples.spacing200, Css.zero, Css.zero),
       /* [] */0
     ]);
 
 var Styles = {
+  fade: fade,
   list: list,
   listItem: listItem,
   label: label,
-  labelText: labelText,
   checkbox: checkbox
 };
 
@@ -112,9 +157,7 @@ function TodoList(Props) {
                                         defaultChecked: todo.completed,
                                         className: checkbox,
                                         type: "checkbox"
-                                      }), React.createElement("span", {
-                                        className: labelText
-                                      }, todo.text)), React.createElement("button", {
+                                      }), React.createElement("span", undefined, todo.text)), React.createElement("button", {
                                     onClick: (function (param) {
                                         return Curry._1(onTodoRemoved, todo);
                                       })
@@ -126,4 +169,4 @@ var make = TodoList;
 
 exports.Styles = Styles;
 exports.make = make;
-/* list Not a pure module */
+/* fade Not a pure module */

@@ -11,6 +11,8 @@ var spacing300 = Css.px(24);
 
 var neutral100 = Css.hex("CACFCF");
 
+var neutral200 = Css.hex("F3F3F3");
+
 function defaultBorder(fn) {
   return Curry._3(fn, Css.px(1), Css.solid, neutral100);
 }
@@ -34,6 +36,7 @@ exports.spacing100 = spacing100;
 exports.spacing200 = spacing200;
 exports.spacing300 = spacing300;
 exports.neutral100 = neutral100;
+exports.neutral200 = neutral200;
 exports.defaultFontFamily = defaultFontFamily;
 exports.defaultBorder = defaultBorder;
 exports.defaultFontSize = defaultFontSize;

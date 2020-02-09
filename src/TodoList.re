@@ -2,6 +2,15 @@ open Todo;
 
 module Styles = {
   open Css;
+  let fade =
+    keyframes([
+      (0, [opacity(0.), transform(translateX(px(-6)))]),
+      (
+        100,
+        [opacity(1.), visibility(visible), transform(translateX(zero))],
+      ),
+    ]);
+
   let list =
     style([
       padding(zero),
@@ -19,7 +28,12 @@ module Styles = {
       borderWidth(px(1)),
       padding(Theme.spacing200),
       selector(":last-child", [borderBottomWidth(zero)]),
-      hover([backgroundColor(Theme.neutral100)]),
+      hover([backgroundColor(Theme.neutral200)]),
+      animationName(fade),
+      animationTimingFunction(easeInOut),
+      animationDuration(300),
+      animationDelay(0),
+      animationFillMode(both),
     ]);
 
   let label =
@@ -27,6 +41,7 @@ module Styles = {
       selector(
         ":before",
         [
+          cursor(`pointer),
           position(absolute),
           width(pct(100.)),
           height(pct(100.)),
@@ -36,8 +51,6 @@ module Styles = {
         ],
       ),
     ]);
-
-  let labelText = style([]);
 
   let checkbox =
     style([
@@ -58,9 +71,7 @@ let make = (~todos: todos, ~onTodoRemoved: todo => unit) => {
                type_="checkbox"
                defaultChecked={todo.completed}
              />
-             <span className=Styles.labelText>
-               todo.text->ReasonReact.string
-             </span>
+             <span> todo.text->ReasonReact.string </span>
            </label>
            <button onClick={_ => {onTodoRemoved(todo)}}>
              "x"->ReasonReact.string

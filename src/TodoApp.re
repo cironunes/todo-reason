@@ -19,6 +19,12 @@ module Styles = {
       borderRadius(Theme.spacing100),
     ]);
 
+  let title =
+    style([
+      margin4(~bottom=Theme.spacing300, ~left=zero, ~right=zero, ~top=zero),
+      padding(zero),
+    ]);
+
   let container = style([display(`flex), marginBottom(Theme.spacing300)]);
   let input =
     style([
@@ -27,6 +33,7 @@ module Styles = {
       fontSize(Theme.defaultFontSize),
       lineHeight(Theme.defaultInputLineHeight),
       Theme.defaultBorder(border),
+      focus([outlineWidth(zero)]),
     ]);
   let button =
     style([
@@ -37,6 +44,7 @@ module Styles = {
       fontSize(Theme.defaultFontSize),
       lineHeight(Theme.defaultButtonLineHeight),
       border(px(1), solid, Theme.primaryBackgroundColor),
+      focus([outlineWidth(zero)]),
     ]);
 };
 
@@ -78,7 +86,7 @@ let make = () => {
     );
 
   <div className=Styles.card>
-    <h1> "To-do"->text </h1>
+    <h1 className=Styles.title> "To-do"->text </h1>
     <form
       className=Styles.container
       onSubmit={e => {
