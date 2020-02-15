@@ -6,6 +6,7 @@ var Block = require("bs-platform/lib/js/block.js");
 var Curry = require("bs-platform/lib/js/curry.js");
 var React = require("react");
 var Theme$ReasonReactExamples = require("./Theme.bs.js");
+var TodoForm$ReasonReactExamples = require("./TodoForm.bs.js");
 var TodoList$ReasonReactExamples = require("./TodoList.bs.js");
 
 Css.$$global("body", /* :: */[
@@ -38,116 +39,22 @@ var title = Css.style(/* :: */[
       ]
     ]);
 
-var container = Css.style(/* :: */[
-      Css.display(/* flex */-1010954439),
-      /* :: */[
-        Css.marginBottom(Theme$ReasonReactExamples.spacing300),
-        /* [] */0
-      ]
-    ]);
-
-var input = Css.style(/* :: */[
-      Css.minWidth(Css.px(190)),
-      /* :: */[
-        Css.padding(Theme$ReasonReactExamples.spacing200),
-        /* :: */[
-          Css.fontSize(Theme$ReasonReactExamples.defaultFontSize),
-          /* :: */[
-            Css.lineHeight(Theme$ReasonReactExamples.defaultInputLineHeight),
-            /* :: */[
-              Theme$ReasonReactExamples.defaultBorder(Css.border),
-              /* :: */[
-                Css.focus(/* :: */[
-                      Css.outlineWidth(Css.zero),
-                      /* [] */0
-                    ]),
-                /* [] */0
-              ]
-            ]
-          ]
-        ]
-      ]
-    ]);
-
-var button = Css.style(/* :: */[
-      Css.marginLeft(Css.px(-1)),
-      /* :: */[
-        Css.backgroundColor(Theme$ReasonReactExamples.primaryBackgroundColor),
-        /* :: */[
-          Css.color(Theme$ReasonReactExamples.primaryTextColor),
-          /* :: */[
-            Css.padding(Theme$ReasonReactExamples.spacing200),
-            /* :: */[
-              Css.fontWeight(Css.bold),
-              /* :: */[
-                Css.fontSize(Theme$ReasonReactExamples.defaultFontSize),
-                /* :: */[
-                  Css.lineHeight(Theme$ReasonReactExamples.defaultButtonLineHeight),
-                  /* :: */[
-                    Css.border(Css.px(1), Css.solid, Theme$ReasonReactExamples.primaryBackgroundColor),
-                    /* :: */[
-                      Css.focus(/* :: */[
-                            Css.outlineWidth(Css.zero),
-                            /* [] */0
-                          ]),
-                      /* :: */[
-                        Css.cursor(/* pointer */-786317123),
-                        /* :: */[
-                          Css.disabled(/* :: */[
-                                Css.background(Theme$ReasonReactExamples.neutral200),
-                                /* :: */[
-                                  Css.borderColor(Theme$ReasonReactExamples.neutral100),
-                                  /* :: */[
-                                    Css.color(Theme$ReasonReactExamples.neutral300),
-                                    /* :: */[
-                                      Css.cursor(/* notAllowed */939907157),
-                                      /* [] */0
-                                    ]
-                                  ]
-                                ]
-                              ]),
-                          /* [] */0
-                        ]
-                      ]
-                    ]
-                  ]
-                ]
-              ]
-            ]
-          ]
-        ]
-      ]
-    ]);
-
 var Styles = {
   card: card,
-  title: title,
-  container: container,
-  input: input,
-  button: button
+  title: title
 };
-
-function text(prim) {
-  return prim;
-}
 
 function TodoApp(Props) {
   var match = React.useReducer((function (state, action) {
           switch (action.tag | 0) {
-            case /* ChangeTodoText */0 :
-                return {
-                        todos: state.todos,
-                        newTodo: action[0]
-                      };
-            case /* Remove */1 :
+            case /* Remove */0 :
                 var todo = action[0];
                 return {
                         todos: List.find_all((function (item) {
                                   return item.id !== todo.id;
-                                }))(state.todos),
-                        newTodo: state.newTodo
+                                }))(state.todos)
                       };
-            case /* Complete */2 :
+            case /* Complete */1 :
                 var todo$1 = action[0];
                 return {
                         todos: List.map((function (item) {
@@ -160,16 +67,14 @@ function TodoApp(Props) {
                                 } else {
                                   return item;
                                 }
-                              }), state.todos),
-                        newTodo: state.newTodo
+                              }), state.todos)
                       };
-            case /* Add */3 :
+            case /* Add */2 :
                 return {
                         todos: List.append(state.todos, /* :: */[
                               action[0],
                               /* [] */0
-                            ]),
-                        newTodo: ""
+                            ])
                       };
             
           }
@@ -188,43 +93,24 @@ function TodoApp(Props) {
             },
             /* [] */0
           ]
-        ],
-        newTodo: ""
+        ]
       });
   var dispatch = match[1];
-  var state = match[0];
   return React.createElement("div", {
               className: card
             }, React.createElement("h1", {
                   className: title
-                }, "To-do"), React.createElement("form", {
-                  className: container,
-                  onSubmit: (function (e) {
-                      e.preventDefault();
-                      return Curry._1(dispatch, /* Add */Block.__(3, [{
-                                      id: new Date().toISOString(),
-                                      text: state.newTodo,
-                                      completed: false
-                                    }]));
+                }, "To-do"), React.createElement(TodoForm$ReasonReactExamples.make, {
+                  onSubmit: (function (item) {
+                      return Curry._1(dispatch, /* Add */Block.__(2, [item]));
                     })
-                }, React.createElement("input", {
-                      className: input,
-                      placeholder: "What's next?",
-                      type: "text",
-                      value: state.newTodo,
-                      onChange: (function (e) {
-                          return Curry._1(dispatch, /* ChangeTodoText */Block.__(0, [e.target.value]));
-                        })
-                    }), React.createElement("button", {
-                      className: button,
-                      disabled: state.newTodo === ""
-                    }, "Add")), React.createElement(TodoList$ReasonReactExamples.make, {
-                  todos: state.todos,
+                }), React.createElement(TodoList$ReasonReactExamples.make, {
+                  todos: match[0].todos,
                   onTodoRemoved: (function (todo) {
-                      return Curry._1(dispatch, /* Remove */Block.__(1, [todo]));
+                      return Curry._1(dispatch, /* Remove */Block.__(0, [todo]));
                     }),
                   onCompletedTodo: (function (todo) {
-                      return Curry._1(dispatch, /* Complete */Block.__(2, [todo]));
+                      return Curry._1(dispatch, /* Complete */Block.__(1, [todo]));
                     })
                 }));
 }
@@ -232,6 +118,5 @@ function TodoApp(Props) {
 var make = TodoApp;
 
 exports.Styles = Styles;
-exports.text = text;
 exports.make = make;
 /*  Not a pure module */
